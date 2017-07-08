@@ -6,23 +6,24 @@
 
 struct date
 {
-    uint8_t day;
-    uint8_t month;
-}
+    unsigned day;
+    unsigned month;
+};
 struct time
 {
     int hour;
     int minute;
-}
+};
 struct event
 {
-    date d;
-    time t;
-    char name[];
-    char description[];
-}
+    struct date d;
+    struct time t;
+    char* name;
+    char* description;
+};
 
-event events[];
+struct event* events;
+
 int main(int argc, const char* argv[])
 {
     if (argc < 2)
@@ -69,7 +70,7 @@ int main(int argc, const char* argv[])
 }
 
 //TODO: clearData(), newEvent()
-int eventadder(int (*f) (void), char input)
+int eventAdder(int (*f) (void), char input)
 {
     switch (input)
     {
@@ -87,19 +88,19 @@ int eventadder(int (*f) (void), char input)
 int newEvent()
 {
     printf("Please enter the name and time of the event in the following order : \"date | time | name\"");
-    //blah
+    //setEvent(e);
     printf("Add another event? (Y,N)");
     char input = '\0';
     scanf("%c", &input);
-    eventadder(newEvent, input);
+    eventAdder(newEvent, input);
 }
 
-void getEvents(event* buffer)
+void getEvents(struct event* buffer)
 {
     //blah
 }
 
-void setEvent(event e)
+void setEvent(struct event e)
 {
     //blah
 }
