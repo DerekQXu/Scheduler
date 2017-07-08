@@ -4,6 +4,25 @@
 #include <stdio.h>
 //#include <ctime.h>
 
+struct date
+{
+    uint8_t day;
+    uint8_t month;
+}
+struct time
+{
+    int hour;
+    int minute;
+}
+struct event
+{
+    date d;
+    time t;
+    char name[];
+    char description[];
+}
+
+event events[];
 int main(int argc, const char* argv[])
 {
     if (argc < 2)
@@ -73,4 +92,14 @@ int newEvent()
     char input = '\0';
     scanf("%c", &input);
     eventadder(newEvent, input);
+}
+
+void getEvents(event* buffer)
+{
+    //blah
+}
+
+void setEvent(event e)
+{
+    //blah
 }
