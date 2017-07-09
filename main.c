@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
 //#include <fcnt1.h>
 #include <stdio.h>
 //#include <ctime.h>
@@ -23,6 +24,7 @@ struct event
 };
 
 struct event* events;
+FILE *fp;
 
 int main(int argc, const char* argv[])
 {
@@ -33,6 +35,7 @@ int main(int argc, const char* argv[])
     }
     char command = *(argv[1]);
     char input = '\0';
+    fp = fopen("sched.txt", "a+");
     switch(command)
     {
         //view events
@@ -41,19 +44,33 @@ int main(int argc, const char* argv[])
             printf("test\n");
             break;
             //new event
+        case('a'):
+            //way to add new event
+            break;
+        case('s'):
+            //way to switch order
+            break;
         case('e'):
-            //way to see if add new event or switch order
+            //way to edit existing event
+            break;
+        case('d'):
+            //deletes an event
             break;
         case('c'):
-            printf("\nDeleting all saved data. Are you sure? (Y,N)\n");
+            printf("Deleting all saved data. Are you sure? (Y,N)\n");
             scanf("%c", &input);
             //ERROR HERE DEBUG for Default
             switch (input)
             {
                 case('y'):
-                    //clearData();
+                    if (clearData() == 0)
+                        printf("Successfully cleared saved data.\n");
+                    else
+                        printf("unlink error.\n");
+                    fclose(fp);
                     return 0;
                 case('n'):
+                    fclose(fp);
                     return 0;
                 default:
                     printf("\nPlease enter a valid option.\n");
@@ -66,11 +83,13 @@ int main(int argc, const char* argv[])
         default:
             printf("Option not recognized.\n");
     }
+    fclose(fp);
     return(0);
 }
 
 //TODO: clearData(), newEvent()
-int eventAdder(int (*f) (void), char input)
+
+int eventLooper(int (*f) (void), char input)
 {
     switch (input)
     {
@@ -84,23 +103,26 @@ int eventAdder(int (*f) (void), char input)
             scanf("%c", &input);
     }
 }
-
+void setEvent(char input [256])
+{
+    fwrite(input, sizeof(input[0]), sizeof(input)/sizeof(input[0]), fp);
+}
+void getEvents(struct event* buffer)
+{
+}
 int newEvent()
 {
     printf("Please enter the name and time of the event in the following order : \"date | time | name\"");
-    //setEvent(e);
+    char input [256];
+    scanf("%s", input);
+    setEvent(input);
     printf("Add another event? (Y,N)");
-    char input = '\0';
-    scanf("%c", &input);
-    eventAdder(newEvent, input);
+    char loop = '\0';
+    scanf("%c", loop);
+    eventLooper(newEvent, loop);
 }
-
-void getEvents(struct event* buffer)
+int clearData()
 {
-    //blah
-}
-
-void setEvent(struct event e)
-{
-    //blah
+    char file[] = "sched.txt";
+    return unlink(file);
 }
