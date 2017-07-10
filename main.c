@@ -45,6 +45,7 @@ int main(int argc, const char* argv[])
             break;
             //new event
         case('a'):
+            newEvent();
             //way to add new event
             break;
         case('s'):
@@ -93,14 +94,17 @@ int eventLooper(int (*f) (void), char input)
 {
     switch (input)
     {
-        case('\0'):
+        //case('\0'):
         case('y'):
-            return (*f)();
+            (*f)();
+            return 0;
         case('n'):
-            return(0);
+            return 0;
         default:
-            printf("Please enter a valid option.");
-            scanf("%c", &input);
+            printf("Please enter a valid option.\n");
+            scanf(" %c", &input);
+            eventLooper((*f), input);
+            break;
     }
 }
 void setEvent(char input [256])
@@ -112,13 +116,12 @@ void getEvents(struct event* buffer)
 }
 int newEvent()
 {
-    printf("Please enter the name and time of the event in the following order : \"date | time | name\"");
-    char input [256];
+    printf("Please enter the name and time of the event in the following order : \"date | time | name\"\n");
+    char input [256], loop = 0;
     scanf("%s", input);
     setEvent(input);
-    printf("Add another event? (Y,N)");
-    char loop = '\0';
-    scanf("%c", loop);
+    printf("Add another event? (Y,N)\n");
+    scanf(" %c", &loop);
     eventLooper(newEvent, loop);
 }
 int clearData()
