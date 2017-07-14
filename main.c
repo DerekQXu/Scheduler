@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <string.h>
 //#include <fcnt1.h>
 #include <stdio.h>
 //#include <ctime.h>
@@ -79,7 +80,7 @@ int main(int argc, const char* argv[])
             }
             break;
         case('h'):
-            printf("Possible Options:\n\tv - view today's events\n\t\t v c - view calender\n\te - edit event\n\t\t e m - manage events (move their times)\n\t\t e a - add new event\n\tc - clear data\n");
+            printf("Possible Options:\n\tview\t-\tview today's events\n\t   view cal\t-\tview calender\n\t   view dat\t-\tview future/past events\n\tedit\t-\tedit events (change desc and time)\n\tmanag\t-\tmanage events (move their times)\n\tappend\t-\tadds new event\n\tclear\t-\tclears data\n");
             break;
         default:
             printf("Option not recognized.\n");
@@ -94,7 +95,7 @@ int eventLooper(int (*f) (void), char input)
 {
     switch (input)
     {
-        //case('\0'):
+        case('\0'):
         case('y'):
             (*f)();
             return 0;
@@ -102,6 +103,7 @@ int eventLooper(int (*f) (void), char input)
             return 0;
         default:
             printf("Please enter a valid option.\n");
+            //fgets(input, 256, stdin);
             scanf(" %c", &input);
             eventLooper((*f), input);
             break;
@@ -109,7 +111,7 @@ int eventLooper(int (*f) (void), char input)
 }
 void setEvent(char input [256])
 {
-    fwrite(input, sizeof(input[0]), sizeof(input)/sizeof(input[0]), fp);
+    fwrite(input, sizeof(input[0]), strlen(input), fp);
 }
 void getEvents(struct event* buffer)
 {
@@ -118,6 +120,7 @@ int newEvent()
 {
     printf("Please enter the name and time of the event in the following order : \"date | time | name\"\n");
     char input [256], loop = 0;
+    input[0] = '\0';
     scanf("%s", input);
     setEvent(input);
     printf("Add another event? (Y,N)\n");
